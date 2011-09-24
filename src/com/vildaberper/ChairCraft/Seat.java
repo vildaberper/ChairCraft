@@ -39,7 +39,7 @@ public class Seat{
 				},
 				ChairCraft.arrow_teleport_ticks,
 				ChairCraft.arrow_teleport_ticks
-		);
+				);
 		id = ChairCraft.p.getServer().getScheduler().scheduleAsyncRepeatingTask(
 				ChairCraft.p,
 				new Runnable(){
@@ -80,7 +80,7 @@ public class Seat{
 				},
 				20 * ChairCraft.arrow_respawn,
 				20 * ChairCraft.arrow_respawn
-		);
+				);
 	}
 
 	public void setArrow(Arrow arrow){

@@ -15,11 +15,11 @@ import org.bukkit.util.Vector;
 
 public class ChairCraftPlayerListener extends PlayerListener{
 	public static List<Seat> seats = new LinkedList<Seat>();
-	public static List<Integer> hold = new LinkedList<Integer>(), t = new LinkedList<Integer>();
+	public static List<Integer> t = new LinkedList<Integer>();
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if((ChairCraft.perm == null || ChairCraft.perm.has(event.getPlayer(), "chaircraft.sit")) && !hold.contains(event.getPlayer().getInventory().getItemInHand().getTypeId()) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock().getTypeId() == 53 || event.getClickedBlock().getTypeId() == 67 || event.getClickedBlock().getTypeId() == 44) && t.contains(event.getClickedBlock().getFace(BlockFace.UP).getTypeId()) && !t.contains(event.getClickedBlock().getFace(BlockFace.DOWN).getTypeId())){
+		if((event.getPlayer().hasPermission("*") || event.getPlayer().hasPermission("chaircraft.*") ||event.getPlayer().hasPermission("chaircraft.sit")) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock().getTypeId() == 53 || event.getClickedBlock().getTypeId() == 67 || event.getClickedBlock().getTypeId() == 44 || event.getClickedBlock().getTypeId() == 109 || event.getClickedBlock().getTypeId() == 108) && t.contains(event.getClickedBlock().getRelative(BlockFace.UP).getTypeId()) && !t.contains(event.getClickedBlock().getRelative(BlockFace.DOWN).getTypeId())){
 			boolean seated = false;
 
 			for(Seat seat : seats){
@@ -36,6 +36,9 @@ public class ChairCraftPlayerListener extends PlayerListener{
 				Location l = b.getLocation();
 				boolean sit = true;
 
+				if(!event.getPlayer().isSneaking()){
+					return;
+				}
 				l.setX(l.getX() + 0.5);
 				l.setY(l.getY() + 0.5);
 				l.setZ(l.getZ() + 0.5);
@@ -44,7 +47,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 						l.setX(l.getX() - ChairCraft.addition);
 						if(ChairCraft.sign_check){
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() == 68){
@@ -55,7 +58,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 								}
 							}
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() == 68){
@@ -70,7 +73,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 						l.setX(l.getX() + ChairCraft.addition);
 						if(ChairCraft.sign_check){
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() == 68){
@@ -81,7 +84,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 								}
 							}
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - i).getTypeId() == 68){
@@ -96,7 +99,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 						l.setZ(l.getZ() - ChairCraft.addition);
 						if(ChairCraft.sign_check){
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() == 68){
@@ -107,7 +110,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 								}
 							}
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() == 68){
@@ -122,7 +125,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 						l.setZ(l.getZ() + ChairCraft.addition);
 						if(ChairCraft.sign_check){
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX() + i, b.getY(), b.getZ()).getTypeId() == 68){
@@ -133,7 +136,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 								}
 							}
 							for(int i = 0; i < ChairCraft.max_width; i++){
-								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 68){
+								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 53 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 67 && b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() != 68 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 108 && b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + i).getTypeId() != 109){
 									sit = false;
 								}
 								if(b.getWorld().getBlockAt(b.getX() - i, b.getY(), b.getZ()).getTypeId() == 68){
@@ -202,6 +205,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 				if(sit){
 					Arrow arrow = l.getWorld().spawnArrow(l, new Vector(0, -1, 0), 0, 0);
 
+					event.setCancelled(true);
 					for(int i = 0; i < seats.size(); i++){
 						if(seats.get(i).getArrow().getPassenger() != null && seats.get(i).getArrow().getPassenger() instanceof Player && ((Player) seats.get(i).getArrow().getPassenger()).equals(event.getPlayer())){
 							event.getPlayer().teleport(event.getPlayer().getLocation());
@@ -216,6 +220,7 @@ public class ChairCraftPlayerListener extends PlayerListener{
 					return;
 				}
 			}else{
+				event.setCancelled(true);
 				for(int i = 0; i < seats.size(); i++){
 					if(seats.get(i).getArrow().getPassenger() != null && seats.get(i).getArrow().getPassenger() instanceof Player && ((Player) seats.get(i).getArrow().getPassenger()).equals(event.getPlayer()) && seats.get(i).getBlock().equals(event.getClickedBlock())){
 						event.getPlayer().teleport(event.getPlayer().getLocation());
@@ -225,7 +230,6 @@ public class ChairCraftPlayerListener extends PlayerListener{
 					}
 				}
 			}
-			event.setCancelled(true);
 		}
 	}
 }
