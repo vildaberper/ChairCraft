@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
-public class ChairCraft extends JavaPlugin{
+public class ChairCraft extends JavaPlugin implements Listener {
 	private final ChairCraftPlayerListener playerListener = new ChairCraftPlayerListener();
 	private final ChairCraftBlockListener blockListener = new ChairCraftBlockListener();
 	private final ChairCraftEntityListener entityListener = new ChairCraftEntityListener();
@@ -19,8 +19,8 @@ public class ChairCraft extends JavaPlugin{
 	public static boolean sign_check = false;
 	public static int max_width = 10, arrow_respawn = 55, arrow_teleport_ticks = 10;
 	public static double addition = 0.1;
+	public static final int amount = 20; // I don't have any idee what value you had in mind. So i make it 20
 
-	@Override
 	public void onDisable(){
 		for(Seat seat : ChairCraftPlayerListener.seats){
 			if(seat != null && seat.getArrow() != null){
@@ -35,7 +35,7 @@ public class ChairCraft extends JavaPlugin{
 		System.out.println(getDescription().getName() + " " + getDescription().getVersion() + " is disabled.");
 	}
 
-	@Override
+	@EventHandler
 	public void onEnable(){
 		List<Integer> i = new LinkedList<Integer>();
 
@@ -68,30 +68,31 @@ public class ChairCraft extends JavaPlugin{
 		i.add(78);
 		ChairCraftPlayerListener.t = i;
 		getDataFolder().mkdir();
-		if(!new File(getDataFolder(), "ChairCraft.yml").exists()){
-			try{
-				new File(getDataFolder(), "ChairCraft.yml").createNewFile();
-			}catch(IOException e){
+		if (!new File(getDataFolder(), "config.yml").exists()) {
+			try {
+				new File(getDataFolder(), "config.yml").createNewFile();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 
-		Configuration c = new Configuration(new File(getDataFolder(), "ChairCraft.yml"));
-
-		c.load();
-		sign_check = c.getBoolean("Sign_check", sign_check);
-		max_width = c.getInt("Max_width", max_width);
-		arrow_respawn = c.getInt("Arrow_respawn_time", arrow_respawn);
-		arrow_teleport_ticks = c.getInt("Arrow_teleport_ticks", arrow_teleport_ticks);
-		c.setProperty("Sign_check", sign_check);
-		c.setProperty("Max_width", max_width);
-		c.setProperty("Arrow_respawn_time", arrow_respawn);
-		c.setProperty("Arrow_teleport_ticks", arrow_teleport_ticks);
-		c.save();
+		sign_check = getConfig().getBoolean("Sign_check", sign_check);
+		max_width = getConfig().getInt("Max_width", max_width);
+		arrow_respawn = getConfig().getInt("Arrow_respawn_time", arrow_respawn);
+		arrow_teleport_ticks = getConfig().getInt("Arrow_teleport_ticks", arrow_teleport_ticks);
+		getConfig().addDefault("Sign_check", sign_check);
+		getConfig().addDefault("Max_width", max_width);
+		getConfig().addDefault("Arrow_respawn_time", arrow_respawn);
+		getConfig().addDefault("Arrow_teleport_ticks", arrow_teleport_ticks);
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 		p = this;
-		getServer().getPluginManager().registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
-		getServer().getPluginManager().registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
-		getServer().getPluginManager().registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+		
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(this.entityListener, this);
+		pm.registerEvents(this.blockListener, this);
+		pm.registerEvents(this.playerListener, this);
+		
 		System.out.println(getDescription().getName() + " " + getDescription().getVersion() + " is enabled.");
 	}
 }

@@ -1,11 +1,13 @@
 package com.vildaberper.ChairCraft;
 
 import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
 
-public class ChairCraftEntityListener extends EntityListener{
-	@Override
+public class ChairCraftEntityListener implements Listener {
+
+	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event){
 		if(!event.isCancelled()){
 			for(Block block : event.blockList()){
