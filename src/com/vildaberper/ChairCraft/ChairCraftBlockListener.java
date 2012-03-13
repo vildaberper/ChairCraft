@@ -1,10 +1,10 @@
 package com.vildaberper.ChairCraft;
 
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 
-public class ChairCraftBlockListener extends BlockListener{
-	@Override
+public class ChairCraftBlockListener implements Listener {
+	
 	public void onBlockBreak(BlockBreakEvent event){
 		if(!event.isCancelled()){
 			for(int i = 0; i < ChairCraftPlayerListener.seats.size(); i++){
